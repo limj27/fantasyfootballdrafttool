@@ -15,6 +15,12 @@ const slotColors = {
     "FLEX": "#00cccc",   
 };
 
+const rostershipColors = {
+    high: "#ff5733" ,  // Red (High rostership)
+    medium: "#ffc300", // Yellow (Medium rostership)
+    low: "#33ff57"  // Green (Low rostership)
+};
+
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -174,6 +180,15 @@ function updateCsvTableButton(row) {
     }
 }
 
+function getRostershipColor(rostership) {
+    const value = parseFloat(rostership.replace("%", "")); // Convert "65%" to 65
+    if (isNaN(value)) return "#ccc"; // Default gray for invalid values
+
+    if (value >= 75) return rostershipColors.high;    // High rostership
+    if (value >= 40) return rostershipColors.medium;  // Medium rostership
+    return rostershipColors.low;                      // Low rostership
+}
+
 function createCard(row, isSelected) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -194,10 +209,18 @@ function createCard(row, isSelected) {
     // Right section (ADP, Projected Points, and Rostership always visible)
     const rightSection = document.createElement("div");
     rightSection.classList.add("card-right");
+    const rostershipValue = row.rostership || "0%"; // Default to 0% if missing
+    const rostershipColor = getRostershipColor(rostershipValue);
+
     rightSection.innerHTML = `
         <div class="metric"><span class="label">ADP:</span> <span class="value">${row.adp}</span></div>
-
-        <div class="metric"><span class="label">Rostership:</span> <span class="value">${row.rostership}</span></div>`;
+        <div class="metric">
+            <span class="label">Rostership:</span>
+            <span class="value" style="color: ${rostershipColor}; font-weight: bold;">
+                ${rostershipValue}
+            </span>
+        </div>`;
+    
 
     // Expandable Section (Hidden Initially)
     const expandableSection = document.createElement("div");
