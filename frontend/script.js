@@ -150,6 +150,30 @@ function isSelectedCard(row) {
     return selectedCards.some(selectedRow => selectedRow.firstName === row.firstName && selectedRow.lastName === row.lastName);  // Compare by `firstName` and `lastName`
 }
 
+function updateSelectedCards() {
+    const selectedContainer = document.getElementById("selectedCards");
+    selectedContainer.innerHTML = ""; // Clear before updating
+
+    selectedCards.forEach(row => {
+        const card = createCard(row, true);
+        selectedContainer.appendChild(card);
+    });
+}
+
+function updateCsvTableButton(row) {
+    const csvContainer = document.getElementById("csvTable");
+    const cards = csvContainer.getElementsByClassName("card");
+
+    for (let card of cards) {
+        const nameElement = card.querySelector(".name");
+        if (nameElement && nameElement.textContent === `${row.firstName} ${row.lastName}`) {
+            const button = card.querySelector(".toggle-button");
+            button.innerHTML = isSelectedCard(row) ? "−" : "+"; // ✅ Dynamically update
+            break;
+        }
+    }
+}
+
 function createCard(row, isSelected) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -190,18 +214,24 @@ function createCard(row, isSelected) {
 
     toggleButton.addEventListener("click", function (event) {
         event.stopPropagation(); // Prevents expanding when clicking the button
-
-        if (isSelected) {
+    
+        if (isSelectedCard(row)) {
+            // Remove from selectedCards
             selectedCards = selectedCards.filter(item => item.firstName !== row.firstName || item.lastName !== row.lastName);
         } else {
+            // Add to selectedCards
             selectedCards.push(row);
         }
-
+    
         selectedCards = selectedCards.filter(item => item.rank && item.rank.trim() !== "");
         selectedCards.sort((a, b) => parseInt(a.rank || 0) - parseInt(b.rank || 0));
-
-        displayCards();
+    
+        updateSelectedCards(); // Only update selected cards
+    
+        // ✅ Update the button state in csvTable
+        updateCsvTableButton(row);
     });
+    
 
     // Expand/Collapse on Click
     card.addEventListener("click", function (event) {
