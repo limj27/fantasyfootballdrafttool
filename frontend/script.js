@@ -5,6 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
 let allCards = [];
 let selectedCards = [];
 let columnsToDisplayIndexes = [];
+const slotColors = {
+    "QB": "#ff5733",     // Example: Orange for Quarterbacks
+    "RB": "#33ff57",     // Green for Running Backs
+    "WR": "#3357ff",     // Blue for Wide Receivers
+    "TE": "#ff33a8",     // Pink for Tight Ends
+    "DEF": "#a833ff",    // Purple for Defense
+    "K": "#ffc300",      // Yellow for Kickers
+    "FLEX": "#00cccc",   // Cyan for Flex
+};
 
 function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -118,48 +127,64 @@ function createCard(row, isSelected) {
     const card = document.createElement("div");
     card.classList.add("card");
 
+    // Get the color based on slotName
+    const borderColor = slotColors[row.slotName] || "#ccc"; // Default gray
+    card.style.borderLeft = `5px solid ${borderColor}`;
+
     // Left section (Name + SlotName)
     const leftSection = document.createElement("div");
     leftSection.classList.add("card-left");
-    leftSection.innerHTML = `<div class="name">${row.firstName} ${row.lastName}</div>
-                             <div class="slotName">${row.slotName}</div>`;
+    leftSection.innerHTML = `
+        <div class="name">${row.firstName} ${row.lastName}</div>
+        <div class="slotName">${row.slotName}</div>`;
 
-    // Right section (Metrics)
+    // Right section (ADP, Projected Points, and Rostership always visible)
     const rightSection = document.createElement("div");
     rightSection.classList.add("card-right");
     rightSection.innerHTML = `
         <div class="metric"><span class="label">ADP:</span> <span class="value">${row.adp}</span></div>
-        <div class="metric"><span class="label">Projected Points:</span> <span class="value">${row.projectedPoints}</span></div>
+        <div class="metric"><span class="label">Proj Pts:</span> <span class="value">${row.projectedPoints}</span></div>
+        <div class="metric"><span class="label">Rostership:</span> <span class="value">${row.rostership}</span></div>`;
+
+    // Expandable Section (Hidden Initially)
+    const expandableSection = document.createElement("div");
+    expandableSection.classList.add("expandable-content");
+    expandableSection.innerHTML = `
         <div class="metric"><span class="label">Position Rank:</span> <span class="value">${row.positionRank}</span></div>
         <div class="metric"><span class="label">Team:</span> <span class="value">${row.teamName}</span></div>
         <div class="metric"><span class="label">Rank:</span> <span class="value">${row.rank}</span></div>`;
 
-    // Toggle button
+    // Toggle button (+ or -)
     const toggleButton = document.createElement("button");
-    toggleButton.innerHTML = isSelected ? "−" : "+";  // Show "minus" if selected, else show "plus"
+    toggleButton.innerHTML = isSelected ? "−" : "+";
     toggleButton.classList.add("toggle-button");
 
-    toggleButton.addEventListener("click", function () {
+    toggleButton.addEventListener("click", function (event) {
+        event.stopPropagation(); // Prevents expanding when clicking the button
+
         if (isSelected) {
-            selectedCards = selectedCards.filter(item => item.firstName !== row.firstName || item.lastName !== row.lastName);  // Remove from selectedCards based on `firstName` and `lastName`
+            selectedCards = selectedCards.filter(item => item.firstName !== row.firstName || item.lastName !== row.lastName);
         } else {
             selectedCards.push(row);
         }
 
-        // Re-sort selected cards based on the rank column each time a new card is selected or deselected
-        selectedCards = selectedCards.filter(item => item.rank && item.rank.trim() !== "");  // Filter out cards without rank
-        selectedCards.sort((a, b) => {
-            const rankA = a.rank ? parseInt(a.rank) : 0; // Handle cases where rank may be undefined
-            const rankB = b.rank ? parseInt(b.rank) : 0; 
-            return rankA - rankB;
-        });
+        selectedCards = selectedCards.filter(item => item.rank && item.rank.trim() !== "");
+        selectedCards.sort((a, b) => parseInt(a.rank || 0) - parseInt(b.rank || 0));
 
-        displayCards();  // Refresh the displayed cards
+        displayCards();
+    });
+
+    // Expand/Collapse on Click
+    card.addEventListener("click", function (event) {
+        if (event.target !== toggleButton) { // Prevent toggle click from triggering expansion
+            card.classList.toggle("expanded");
+        }
     });
 
     // Add elements to card
     card.appendChild(leftSection);
     card.appendChild(rightSection);
+    card.appendChild(expandableSection);
     card.appendChild(toggleButton);
 
     return card;
