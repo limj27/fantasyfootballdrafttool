@@ -17,21 +17,25 @@ h1 {
 
 /* Styling for filter tabs */
 #filterTabs {
-    margin-bottom: 15px;
+    margin: 20px 0 15px;
 }
 
-.tab {
+.tab, .filter-tab {
     display: inline-block;
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px;
+    margin: 5px;
     font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
 }
 
-.tab:hover {
+.tab:hover, .filter-tab:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
     background-color: #0056b3;
 }
 
@@ -47,26 +51,13 @@ h1 {
     height: 100%;
 }
 
-/* Styling for the CSV table container */
-#csvTable {
+/* Styling for table containers */
+#csvTable, #selectedCards {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5px;
-    width: 48%;  /* Adjust the width for side-by-side layout */
+    width: 48%;
     height: 100%;
-    /* max-height: 1000px; */
-    overflow-y: auto;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Styling for the selected cards container */
-#selectedCards {
-    display: flex;
-    flex-wrap: wrap;
-    width: 48%;  /* Adjust the width for side-by-side layout */
-    height: 100%;
-    /* max-height: 1000px; */
     overflow-y: auto;
     justify-content: center;
     align-items: center;
@@ -85,66 +76,23 @@ h1 {
     border: 1px solid gray;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    height: 55px; /* Compact height */
+    height: 55px;
     width: 100%;
     overflow: hidden;
     transition: height 0.3s ease-in-out;
 }
 
 .card.expanded {
-    height: 100px; /* Expanded height */
+    height: 100px;
 }
 
 .card-left {
     flex: 1;
-    text-align: left;
-}
-
-.card-right {
-    display: flex;
-    text-align: right;
-    flex-direction: column;
-    justify-content: center;
-    margin-right: 15px;
-}
-
-.metric {
-    font-size: 12px;
-    display: flex;
-    gap: 3px;
-    color: white;
-}
-
-.expandable-content {
-    display: none;
-    width: 100%;
-    text-align: right;
-}
-
-.card.expanded .expandable-content {
-    display: block;
-}
-
-.toggle-button {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px;
-    color: #333;
-}
-
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-/* Card left section (name and slotName) */
-.card-left {
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-right: 20px;
+    text-align: left;
 }
 
 .card-left .name {
@@ -157,27 +105,21 @@ h1 {
     font-size: 16px;
     color: #777;
 }
-.filter-tab {
-    padding: 8px 12px;
-    margin: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 1px;
-    font-size: 14px;
-    font-weight: bold;
-    transition: transform 0.2s ease-in-out;
-}
 
-.filter-tab:hover {
-    transform: scale(1.1);
-    opacity: 0.9;
+.card-right {
+    display: flex;
+    text-align: right;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 15px;
 }
-
-/* Card right section (metrics) */
 
 .card-right .metric {
     font-size: 14px;
     margin-bottom: 5px;
+    display: flex;
+    gap: 3px;
+    color: white;
 }
 
 .card-right .metric .label {
@@ -189,13 +131,36 @@ h1 {
     color: white;
 }
 
+.card .toggle-button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    color: #333;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.expandable-content {
+    display: none;
+    width: 100%;
+    text-align: right;
+}
+
+.card.expanded .expandable-content {
+    display: block;
+}
+
 /* Button styling */
 .card button {
     padding: 5px;
     font-size: 18px;
     background-color: dodgerblue;
     color: white;
-    border: none;
+    border: 1px solid white;
     border-radius: 5px;
     cursor: pointer;
     width: 30px;
@@ -210,40 +175,33 @@ h1 {
 }
 
 .divider {
-    width: 1px;  /* Thin divider (line) */
-    background-color: #000;  /* Divider color (black line) */
-    height: 100%;  /* Divider height (full height of the container) */
-    margin: 0 10px;  /* Optional: adds space around the divider */
+    width: 1px;
+    background-color: #000;
+    height: 100%;
+    margin: 0 10px;
 }
-
 
 @media (max-width: 768px) {
     #tablesContainer {
-        flex-direction: column;  /* Stack them vertically on small screens */
+        flex-direction: column;
     }
 
     #csvTable, #selectedCards {
-        width: 100%;  /* Full width for smaller screens */
+        width: 100%;
     }
 
-    /* Adjust the card width for smaller screens */
     .card {
         width: 100%;
     }
 }
-/* Style for the file input container */
+
+/* File input styling */
 .file-input-container {
     position: relative;
     display: inline-block;
-    margin-bottom: 20px; /* Adds space below the file input button */
+    margin-bottom: 20px;
 }
 
-/* Style for the filter tabs container (if needed) */
-#filterTabs {
-    margin-top: 20px; /* Adds space above the filter tabs */
-}
-
-/* Rest of your custom styles for the file input button */
 .file-input-container input[type="file"] {
     display: none;
 }

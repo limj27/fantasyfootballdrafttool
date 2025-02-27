@@ -233,6 +233,9 @@ function createCard(row, isSelected) {
     // Toggle button (+ or -)
     const toggleButton = document.createElement("button");
     toggleButton.innerHTML = isSelected ? "−" : "+";
+    toggleButton.style.backgroundColor = isSelected ? "dodgerblue" : "gray"; // Black for "−", Blue for "+"
+    toggleButton.style.color = isSelected ? "#fff" : "#fff"; // White text for both states
+    
     toggleButton.classList.add("toggle-button");
 
     toggleButton.addEventListener("click", function (event) {
@@ -250,6 +253,12 @@ function createCard(row, isSelected) {
         selectedCards.sort((a, b) => parseInt(a.rank || 0) - parseInt(b.rank || 0));
     
         updateSelectedCards(); // Only update selected cards
+    
+        // ✅ Check if the row is now selected and update the button accordingly
+        const currentlySelected = isSelectedCard(row);
+        toggleButton.innerHTML = currentlySelected ? "−" : "+";
+        toggleButton.style.backgroundColor = currentlySelected ? "dodgerblue" : "gray"; // Black for "−", Blue for "+"
+        toggleButton.style.color = currentlySelected ? "#fff" : "#fff"; // White text for both states
     
         // ✅ Update the button state in csvTable
         updateCsvTableButton(row);
