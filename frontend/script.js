@@ -6,13 +6,13 @@ let allCards = [];
 let selectedCards = [];
 let columnsToDisplayIndexes = [];
 const slotColors = {
-    "QB": "#ff5733",     // Example: Orange for Quarterbacks
-    "RB": "#33ff57",     // Green for Running Backs
-    "WR": "#3357ff",     // Blue for Wide Receivers
-    "TE": "#ff33a8",     // Pink for Tight Ends
-    "DEF": "#a833ff",    // Purple for Defense
-    "K": "#ffc300",      // Yellow for Kickers
-    "FLEX": "#00cccc",   // Cyan for Flex
+    "QB": "#DDA0DD",     
+    "RB": "#32CD32",     
+    "WR": "#FF7F50",     
+    "TE": "#1E90FF",     
+    "DEF": "#a833ff",    
+    "K": "#ffc300",      
+    "FLEX": "#00cccc",   
 };
 
 function handleFileUpload(event) {
@@ -70,20 +70,47 @@ function parseRank(rank) {
     return isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed; // Non-numeric ranks will be sorted last
 }
 
-function createFilterTabs(slotIndex) {
-    // Filter out invalid slotName values (undefined, null, or empty strings)
-    const uniqueValues = [...new Set(allCards.map(row => row.slotName && row.slotName.trim()))];
-    const validValues = uniqueValues.filter(value => value && value !== "undefined" && value.trim() !== "");
+function createFilterTabs() {
+    const filterContainer = document.getElementById("filterTabs");
+    filterContainer.innerHTML = ""; // Clear existing filters
 
-    const filterTabs = document.getElementById("filterTabs");
+    // Get unique slotNames
+    const uniqueSlots = [...new Set(allCards.map(card => card.slotName).filter(Boolean))];
+    
+    uniqueSlots.forEach(slot => {
+        const button = document.createElement("button");
+        button.textContent = slot;
+        button.classList.add("filter-tab");
 
-    // Create "All" tab
-    filterTabs.innerHTML = `<span class="tab active" onclick="filterTable(null, ${slotIndex})">All</span>`; 
-    console.log(validValues)
-    // Create tabs for valid slotName values
-    validValues.forEach(value => {
-        filterTabs.innerHTML += `<span class="tab" onclick="filterTable('${value}', ${slotIndex})">${value}</span>`;
+        // Apply color based on slotName
+        const borderColor = slotColors[slot] || "#ccc"; // Default gray
+        button.style.backgroundColor = borderColor;
+        button.style.color = "#fff"; // Ensure text is visible
+
+        button.addEventListener("click", () => {
+            filterCards(slot);
+        });
+
+        filterContainer.appendChild(button);
     });
+
+    // "All" button
+    const allButton = document.createElement("button");
+    allButton.textContent = "All";
+    allButton.classList.add("filter-tab");
+    allButton.style.backgroundColor = "#000"; // Default black for All
+    allButton.style.color = "#fff";
+
+    allButton.addEventListener("click", () => {
+        displayCards();
+    });
+
+    filterContainer.appendChild(allButton);
+}
+
+function filterCards(slot) {
+    const filteredData = allCards.filter(card => card.slotName === slot);
+    displayCards(filteredData);
 }
 
 function filterTable(filterValue, slotIndex) {
@@ -131,12 +158,14 @@ function createCard(row, isSelected) {
     const borderColor = slotColors[row.slotName] || "#ccc"; // Default gray
     card.style.borderLeft = `5px solid ${borderColor}`;
 
-    // Left section (Name + SlotName)
+    // Left section (Name + Position Rank)
     const leftSection = document.createElement("div");
     leftSection.classList.add("card-left");
     leftSection.innerHTML = `
         <div class="name">${row.firstName} ${row.lastName}</div>
-        <div class="slotName">${row.slotName}</div>`;
+        <div class="positionRank" style="background-color: ${borderColor}; color: #000000; padding: 2px 6px; border-radius: 4px; display: inline-block; width: 50px;">
+            ${row.positionRank}
+        </div>`;
 
     // Right section (ADP, Projected Points, and Rostership always visible)
     const rightSection = document.createElement("div");
@@ -189,3 +218,4 @@ function createCard(row, isSelected) {
 
     return card;
 }
+
