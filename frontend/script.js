@@ -16,9 +16,9 @@ const slotColors = {
 };
 
 const rostershipColors = {
-    high: "#ff5733" ,  // Red (High rostership)
+    high: "#33ff57",  // Red (High rostership)
     medium: "#ffc300", // Yellow (Medium rostership)
-    low: "#33ff57"  // Green (Low rostership)
+    low: "#ff5733" // Green (Low rostership)
 };
 
 function handleFileUpload(event) {
@@ -184,8 +184,8 @@ function getRostershipColor(rostership) {
     const value = parseFloat(rostership.replace("%", "")); // Convert "65%" to 65
     if (isNaN(value)) return "#ccc"; // Default gray for invalid values
 
-    if (value >= 75) return rostershipColors.high;    // High rostership
-    if (value >= 40) return rostershipColors.medium;  // Medium rostership
+    if (value >= 20) return rostershipColors.high;    // High rostership
+    if (value >= 7) return rostershipColors.medium;  // Medium rostership
     return rostershipColors.low;                      // Low rostership
 }
 
