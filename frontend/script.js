@@ -6,10 +6,10 @@ let allCards = [];
 let selectedCards = [];
 let columnsToDisplayIndexes = [];
 const slotColors = {
-    "QB": "#DDA0DD",     
-    "RB": "#32CD32",     
-    "WR": "#FF7F50",     
-    "TE": "#1E90FF",     
+    "QB": "#DA70D6",     
+    "RB": "#50C878",     
+    "WR": "#FFAC1C",     
+    "TE": "#50A0C8",     
     "DEF": "#a833ff",    
     "K": "#ffc300",      
     "FLEX": "#00cccc",   
@@ -172,7 +172,7 @@ function createCard(row, isSelected) {
     rightSection.classList.add("card-right");
     rightSection.innerHTML = `
         <div class="metric"><span class="label">ADP:</span> <span class="value">${row.adp}</span></div>
-        <div class="metric"><span class="label">Proj Pts:</span> <span class="value">${row.projectedPoints}</span></div>
+
         <div class="metric"><span class="label">Rostership:</span> <span class="value">${row.rostership}</span></div>`;
 
     // Expandable Section (Hidden Initially)
