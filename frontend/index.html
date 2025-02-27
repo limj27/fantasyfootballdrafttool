@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Football</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Fantasy Football</h1>
+
+    <!-- File input for uploading CSV -->
+    <input type="file" id="csvFile" accept=".csv">
+
+    <!-- Filter Tabs -->
+    <div id="filterTabs"></div>
+
+    <!-- Container for the two tables: CSV Table and Selected Cards -->
+    <div id="tablesContainer">
+        <!-- Display the CSV table -->
+        <div id="csvTable"></div>
+        <div class="divider"></div>
+        <!-- Display the selected cards -->
+        <div id="selectedCards"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
