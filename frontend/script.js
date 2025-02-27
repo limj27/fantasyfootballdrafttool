@@ -81,19 +81,22 @@ function filterTable(filterValue, slotIndex) {
     document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active")); // Remove active class
     event.target.classList.add("active"); // Highlight selected tab
 
+    // Filter the cards based on slotName
     const filteredData = filterValue ? allCards.filter(row => row.slotName && row.slotName.trim() === filterValue) : allCards;
-    displayCards(filteredData);  // Only update the rows, not the headers
+    
+    displayCards(filteredData);  // Pass the filtered data
 }
 
-function displayCards() {
+function displayCards(filteredData = allCards) {
     const csvContainer = document.getElementById("csvTable");
     const selectedContainer = document.getElementById("selectedCards");
 
     csvContainer.innerHTML = "";
     selectedContainer.innerHTML = "";
 
-    allCards.forEach(row => {
-        const card = createCard(row, isSelectedCard(row));  // Pass whether the card is selected
+    // Display filtered cards
+    filteredData.forEach(row => {
+        const card = createCard(row, isSelectedCard(row));
         csvContainer.appendChild(card);
     });
 
@@ -101,7 +104,7 @@ function displayCards() {
     const validSelectedCards = selectedCards.filter(row => row.rank && row.rank.trim() !== ""); 
 
     validSelectedCards.forEach(row => {
-        const card = createCard(row, true);  // Always show "minus" for cards in selectedCards
+        const card = createCard(row, true);
         selectedContainer.appendChild(card);
     });
 }
