@@ -167,17 +167,24 @@ function updateSelectedCards() {
 }
 
 function updateCsvTableButton(row) {
-    const csvContainer = document.getElementById("csvTable");
-    const cards = csvContainer.getElementsByClassName("card");
-
-    for (let card of cards) {
-        const nameElement = card.querySelector(".name");
-        if (nameElement && nameElement.textContent === `${row.firstName} ${row.lastName}`) {
-            const button = card.querySelector(".toggle-button");
-            button.innerHTML = isSelectedCard(row) ? "−" : "+"; // ✅ Dynamically update
-            break;
+    const updateButton = (container) => {
+        const cards = container.getElementsByClassName("card");
+        for (let card of cards) {
+            const nameElement = card.querySelector(".name");
+            if (nameElement && nameElement.textContent === `${row.firstName} ${row.lastName}`) {
+                const button = card.querySelector(".toggle-button");
+                const currentlySelected = isSelectedCard(row);
+                button.innerHTML = currentlySelected ? "−" : "+";
+                button.style.backgroundColor = currentlySelected ? "dodgerblue" : "gray"; 
+                button.style.color = "#fff";
+                break;
+            }
         }
-    }
+    };
+
+    // Update both CSV table and selected list
+    updateButton(document.getElementById("csvTable"));
+    updateButton(document.getElementById("selectedCards"));
 }
 
 function getRostershipColor(rostership) {
